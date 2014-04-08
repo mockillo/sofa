@@ -1,0 +1,28 @@
+Healer {	
+	wounded() -> Heal Friendly.Healer Move oppositeDirection(closest(Enemy))
+	
+	Friendly.Warrior.wounded() -> Heal Friendly.Warrior Move direction(Friendly.Warrior)
+	
+	otherwise -> Heal Friendly.Ranger Move direction(Friendly.Ranger)
+}
+
+Warrior {
+	otherwise -> Move direction(Enemy.Healer) Attack Enemy.Healer
+}
+
+Ranger {
+	distance(closest(Enemy)) > 9 -> Move direction(closest(Enemy)) Attack closest(Enemy)
+	
+	distance(closest(Enemy)) < 4 
+	-> Move oppositeDirection(closest(Enemy)) Attack closest(Enemy)
+			
+	Enemy.Ranger.alive(),
+	distance(Enemy.Ranger) <= 10
+	-> Move direction(Enemy.Ranger) Attack Enemy.Ranger
+	
+	Enemy.Healer.alive(),
+	distance(Enemy.Healer) < 10 -> Move direction(closest(Enemy)) Attack Enemy.Healer
+	
+			
+	otherwise -> Move direction(closest(Enemy)) Attack closest(Enemy)
+}

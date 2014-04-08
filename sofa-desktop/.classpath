@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/sofa"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Users/mockillo/dev/libraries/java/libgdx-0.9.9/gdx-backend-lwjgl-natives.jar"/>
+	<classpathentry kind="lib" path="/Users/mockillo/dev/libraries/java/libgdx-0.9.9/gdx-backend-lwjgl.jar"/>
+	<classpathentry kind="lib" path="/Users/mockillo/dev/libraries/java/libgdx-0.9.9/gdx-natives.jar"/>
+	<classpathentry kind="lib" path="/Users/mockillo/dev/libraries/java/libgdx-0.9.9/gdx.jar" sourcepath="/sofa/libs/gdx-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

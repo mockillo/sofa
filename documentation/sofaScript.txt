@@ -1,0 +1,183 @@
+Syntax:
+
+Warrior {
+    condition, condition -> token token
+    condition -> token
+    otherwise -> token
+}
+
+Ranger {
+    condition -> token token
+    otherwise -> token
+}
+
+Healer {
+    condition, condition -> token
+    otherwise -> token
+}
+
+Conditions can be either a boolean expression or a numeral comparison. You can refer to all other characters and build conditions that don't even consider your character in the conditions. To refer to a friendly warrior you would use Friendly.Warrior before your function, or Enemy.Healer for the enemy healer. If you omit specifying target character the function will be called on the character where the function is used. You can add as many conditions as you want to as many tokens as you want by comma separating the conditions with a comma. Conditions are read top to bottom and the first set of conditions that are all true will be used, so prioritise by keeping the most important rules as high as you can.
+
+Tokens can be one or more character commands, basically what the character will do if the leading conditions are true. You can also return as many tokens as you want without comma separating them.
+
+Tokens can be any of the following:
+
+Move <direction or character>
+Attack <character>
+Heal <character>
+Defend (Not yet implemented)
+Roam (Not yet implemented)
+
+Character functions:
+
+Boolean:
+	wounded()
+	inRange(character)
+	alive
+
+Character:
+	closest(friendly/enemy)
+	farthest(friendly/enemy)
+
+Directions:
+	direction(character)
+	relativeDirection(character, direction)
+	oppositeDirection(character)
+
+Example script:
+
+Warrior {
+	distance(Enemy.Healer) < Enemy.Warrior.distance(Friendly.Healer)
+		-> Move direction(Enemy.Healer) Attack Enemy.Healer
+		
+	wounded(),
+	distance(Enemy.Any) <= 2 
+	-> Defend
+
+	otherwise 	->
+		Attack closest(Enemy) Move direction(closest(Enemy))
+}
+
+Healer {
+	Friendly.Ranger.wounded() -> Heal Friendly.Ranger Move direction(Friendly.Ranger)
+	
+	distance(Enemy.Warrior) <= 10
+		-> Move direction(Friendly.Ranger) Heal closest(Friendly)
+	
+	wounded() -> Heal Friendly.Healer
+	
+	otherwise -> Heal Friendly.Warrior Move direction(Friendly.Warrior)
+}
+
+Ranger {
+	Enemy.Healer.alive() -> Attack Enemy.Healer Move direction(Enemy.Healer)
+	Enemy.Ranger.alive() -> Move relativeDirection(Enemy.Ranger, Right) Attack Enemy.Ranger
+	
+	distance(Enemy.Warrior) <6 
+	 -> Move relativeDirection(Enemy.Warrior, Down) Attack Enemy.Warrior
+	
+	otherwise -> Attack closest(Enemy) Move direction(closest(Enemy))
+}
+
+And the entire grammar:
+
+grammar SofaLang; 
+
+prog: root;
+
+INT: [0-9]+;
+ID: [a-zA-Z]+;
+ARROW: '->';
+
+root:
+    team
+;
+
+team:
+	classentry+
+;
+
+classentry:
+	classname '{' logic+ '}'
+;
+
+classname:
+	'Warrior' 	#className_Warrior
+	| 'Healer' 	#className_Healer
+	| 'Ranger' 	#className_Ranger
+	| 'Any'		#className_Any
+;
+
+logic:
+	expr+ (ARROW) token+
+;
+
+expr:
+	comparison 		#expr_Comparison 
+	| booleanBuiltin	#expr_booleanBuiltin 
+	| 'otherwise' 		#expr_Otherwise
+;
+
+comparison:
+	numberBuiltin bop numberBuiltin 	#comparison_numberBuiltin
+;
+
+numberBuiltin:
+	(target '.')?  ('distance') '(' targetBuiltin ')'	#numberBuiltin_distanceTo 
+	| (target '.')?  ('health') '(' ')' 			#numberBuiltin_health
+	| (target '.')?  ('maxhealth') '(' ')' 			#numberBuiltin_maxHealth
+	| (target '.')?  ('range') '(' ')' 			#numberBuiltin_range
+	| INT							#numberBuiltin_number
+;
+
+directionalBuiltin:
+	(target '.')? ('direction') '(' targetBuiltin ')'				#directionalBultin_directionTo
+	| (target '.')? ('oppositeDirection') '(' targetBuiltin ')'			#directionalBultin_oppositeDirectionTo
+	| direction									#directionalBultin_direction
+;
+
+booleanBuiltin:
+	(target '.')?  ('wounded') 	'(' ')'		#booleanBuiltin_wounded 
+	| (target '.')?  ('inRange') 	'(' target ')' 	#booleanBuiltin_inRange
+	| (target '.')?  ('alive')	'(' ')'		#booleanBuiltin_alive
+;
+
+
+targetBuiltin:
+	(target '.')? 'closest' '(' alignment ')' 	#targetBuiltin_closest
+	| (target '.')? 'farthest' '(' alignment ')' 	#targetBuiltin_farthest
+	| target					#targetBuiltin_target
+;
+
+token:
+	'Move' 		directionalBuiltin 	#token_move
+	| 'Attack' 	targetBuiltin 		#token_attack
+	| 'Heal' 		targetBuiltin 	#token_heal
+	| 'Defend' 				#token_defend
+	| 'Roam'				#token_roam
+;
+
+direction:
+	'Up' 		#direction_up
+	| 'Down'	#direction_down 
+	| 'Left' 	#direction_left
+	| 'Right'	#direction_right
+;
+
+alignment:
+	'Friendly'	#alignment_friendly 
+	| 'Enemy'	#alignment_enemy
+;
+
+target:
+	alignment '.' classname
+;
+
+bop:
+	'==' 	#bop_eq
+	| '>=' 	#bop_ge
+	| '<=' 	#bop_le
+	| '!=' 	#bop_ne
+	| '<' 	#bop_lt
+	| '>'	#bop_gt
+;
