@@ -18,7 +18,7 @@ Requirements:
 
 After downloading the requirements above open all three projects in eclipse.
 Update the classpath in each project to point to the correct location of each library.
-Export a runnable jar from the sofa project.
+Export a runnable jar from the sofa-desktop project.
 
 ## Running
 
