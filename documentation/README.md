@@ -100,6 +100,8 @@ This script will attack any hostile enemy that is closer to our healer than they
 
 You can have several boolean expressions in a predicate, and you can chain them by comma separating them. The comma acts as a AND-operator and the predicate will only hold if all the boolean expressions are true.
 
+(TODO: Insert illustrations of script flow)
+
 #### Functions
 
 Functions that return floating point values, that would need evaluation in a predicate (< / > / >= / <= etc..):
