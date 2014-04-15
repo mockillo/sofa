@@ -300,11 +300,11 @@ The system design is based on patters that separate concerns, and I have been sp
 
 This class diagram shows how the code is structured. I have excluded classes involved with SOFAScript. Dotted lines represent dependencies between classes, and solid represents associations.
 
-![ClassDiagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_class_diagram.png =800x)
+![ClassDiagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_class_diagram.png)
 
 This class diagram shows where the Evaluator is plugged into the code above, and how the generated ANTLR4 classes comes into play. I have excluded all private classes in SofaLangParser.java. Also as before, dotted lines represent dependencies between classes, and solid represents associations.
 
-![EvaluatorClassDiagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_evaluator_class_diagram.png =800x)
+![EvaluatorClassDiagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_evaluator_class_diagram.png)
 
 ### Implementation
 
