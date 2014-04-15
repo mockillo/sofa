@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.5" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true">  
+  <class id="1" language="java" name="com.tehforce.sofa.logic.Character" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/logic/Character.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="782" width="307" x="1317" y="2023"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="com.tehforce.sofa.parser.SofaLangLexer" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/parser/SofaLangLexer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1034" width="288" x="41" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.tehforce.sofa.parser.Evaluator" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/parser/Evaluator.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1034" width="546" x="1317" y="37"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.tehforce.sofa.parser.SofaLangParser" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/parser/SofaLangParser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="1610" width="288" x="525" y="2023"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="5" language="java" name="com.tehforce.sofa.parser.SofaLangVisitor" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/parser/SofaLangVisitor.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="872" width="511" x="525" y="1111"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </interface>  
+  <class id="6" language="java" name="com.tehforce.sofa.parser.ErrorHandler" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/parser/ErrorHandler.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="98" width="444" x="41" y="1111"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="com.tehforce.sofa.parser.Value" project="sofa" 
+    file="/sofa/src/com/tehforce/sofa/parser/Value.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="350" width="220" x="1076" y="1111"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <association id="12">    
+    <bendpoint x="1326" y="1111"/>    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="13" name="current"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="15">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </realization>  
+  <association id="16">    
+    <bendpoint x="1347" y="1111"/>    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="17" name="evaluator"/>      
+      <multiplicity id="18" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

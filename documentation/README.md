@@ -298,7 +298,13 @@ Now, the next step was to be realistic and consider the fact that a RTS with mul
 
 The system design is based on patters that separate concerns, and I have been splitting game logic from rendering code as much as I can. And by using Scene2D from libGDX I have separated all rendering into what Scene2D calls Actors, where I have one actor for each entity that should be drawn from the game logic. This way each Actor is responsible for everything regarding drawing for it's object, and draw calls are made down the tree from the Scene at the top and down to all actors through actor groups. This way there is no massive draw()-method in the main update()-method that has to handle and draw everything in the scene.
 
-(TODO: INSERT CLASS DIAGRAM)
+This class diagram shows how the code is structured. I have excluded classes involved with SOFAScript. Dotted lines represent dependencies between classes, and solid represents associations.
+
+![ClassDiagram](./images/sofa_class_diagram.png =800x)
+
+This class diagram shows where the Evaluator is plugged into the code above, and how the generated ANTLR4 classes comes into play. I have excluded all private classes in SofaLangParser.java. Also as before, dotted lines represent dependencies between classes, and solid represents associations.
+
+![EvaluatorClassDiagram](./images/sofa_evaluator_class_diagram.png =800x)
 
 ### Implementation
 
