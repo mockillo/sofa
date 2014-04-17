@@ -21,6 +21,7 @@
 	- Testing
 	- Milestones ;-)
 - Conclusion
+- Credit
 
 ### Introduction
 
@@ -284,6 +285,10 @@ bop:
 
 ### SOFA Simulation
 
+The simulation uses libGDX to render the battle between the two teams. The teams start in each horizontal end of the window, team 1 to the left, team 2 to the right. Every 250 ms, or you may say every a tick, the simulation will get tokens from the scripts based on the current state of the simulation and execute them. Every token that is valid will be printed to the command line so you can follow the battle in text aswell. After one of the teams are eliminated the main window will close and the winner will be printed to the command line.
+
+One of the current drawbacks of the simulation is the fact that the request and execution of tokens is not parallel, so the red team (team 1), will always have their tokens executed before the blue team (team 2).
+
 ## Development Approach
 
 ### Idea
@@ -300,20 +305,42 @@ The system design is based on patters that separate concerns, and I have been sp
 
 This class diagram shows how the code is structured. I have excluded classes involved with SOFAScript. Dotted lines represent dependencies between classes, and solid represents associations.
 
-![ClassDiagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_class_diagram.png)
+![Class Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_class_diagram.png)
 
 This class diagram shows where the Evaluator is plugged into the code above, and how the generated ANTLR4 classes comes into play. I have excluded all private classes in SofaLangParser.java. Also as before, dotted lines represent dependencies between classes, and solid represents associations.
 
-![EvaluatorClassDiagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_evaluator_class_diagram.png)
+![Evaluator Class Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/sofa_evaluator_class_diagram.png)
 
 ### Implementation
 
+Implementation was done in several stages, where the first part was done as part of the assignment of INF225.
+
+The very first version, co-developed with Patrick Monslaup, was implemented using Xtext. This solution was based around converting the content of the SOFAScripts to Java-code during compilation, so it was not a very good solution for a piece of software where you expect the scripts to change very often. The consequence of this is that you need to call the Xtext bits to generate Java-code, then compile those files, then you can run the simulation.
+
+The first version came with a few perks though, which have later been wavered when I decided to change the approach used. One of which I would like to add again at a later time in some form or the other, a editor with syntax highlighting and code completion. With Xtext you get this for free in the form of a Eclipse Xtext nature.
+
+The later version was implemented using most of the same simulation code from the first version, though it underwent a lot of restructuring and refactoring before the version you see now. I also chose to completely rewrite everything related to SOFAScript. The new approach was by using ANTLR4, a parser generator for Java. By using ANTLR4 and a rewritten grammar of SOFAScript, I generated a parser and tree visitor. I then wrote an evaluator extending ANTLR4's AbstractParseTreeVisitor and implementing the generated SofaLangVisitor interface. Then I updated the simulation code to include the new evaluator, and SOFAScript is now evaluated during runtime. 
+
 ### Testing
 
-## Challengs
+The original simulation code was written as a small addition to the assignment in INF225, as the focus was to be on the SOFAScript language, and you might say that the choice to not do test driven development has come back and bit me now that I was doing this as a full project, but more on this in the next section. 
+
+The unit testing that has been done on the SOFA simulation and SOFAScript has been focused on testing the functionality of the features I have implemented, and not testing dependencies or implementation of specific parts.
+
+## Challenges
 
 ### Testing
+
+As mentioned earlier, there were several problems with testing the original simulation code, and it has seen lots of refactoring to make the code testable. This is a common thing you might hear from someone who is not used to test driven development, and from people who, like me in this case, have to test something written without testing in mind what so ever. 
+
+Now, you might ask yourself "just what does anyone mean by making their code testable?". This is certainly a question my supervisor asked me, and wanted me to elaborate on.
+
+(TODO: Continue this segment. Keywords: Accessibility, state and long long long methods.)
 
 ### Milestones
 
 ## Conclusion
+
+## Credit
+
+A big thank you to Paul Grant for the sprites used in the simulation.
