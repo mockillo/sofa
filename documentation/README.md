@@ -19,8 +19,11 @@
 	- Testing
 - Challenges
 	- Testing
-	- Milestones ;-)
+	- Milestones
 - Conclusion
+	- Learning
+	- Implementation
+	- Testing
 - Credit
 
 ### Introduction
@@ -335,12 +338,291 @@ As mentioned earlier, there were several problems with testing the original simu
 
 Now, you might ask yourself "just what does anyone mean by making their code testable?". This is certainly a question my supervisor asked me, and wanted me to elaborate on.
 
-(TODO: Continue this segment. Keywords: Accessibility, state and long long long methods.)
+The first problem when you want to test something that isn't developed using TDD, is to identify just what to test and how. As mentioned earlier I wanted to test functionality and not implementation, and what I mean by that is something a guest lecturer lectured to us a year ago at UiB. Her examples when talking about TDD was to defined what essential functions (think functionality, not programming functions (even though this is Java so functions don't exist, yet.)) your class has, and test those irregardless of what methods you use. For example you can have a POS (point-of-sale) system, and you define adding a single and adding multiple products to an order as a functional requirement, and you want to test that these functions work as expected. The natural thing then is to write tests that perform these functions and not tests that just operate on the single methods in your unit.
+
+Keep in mind that some methods can be tested specifically by themselves, especially calculation algorithms.
+
+In my case I started by going through my list of classes and identifying, which if using TDD should've been done at the beginning, what functionality I needed to test. And I identified what functions the different classes added to the whole. The list I arrived at was as follows:
+
+```
+ArrowActor:
+	- Rotation calculation
+	
+CharacterActor:
+	- Moving, based on different input.
+	- AnimationState
+	- AttackState
+	
+Character:
+	- Attack
+	- Heal
+	- Distance calculation
+	- Range
+	- Closest calculation
+	- Farthest calculation
+	- Equals
+	- Defense
+	- CoolDown
+	
+Team:
+	- Alive
+	
+Token:
+	- Equals
+	
+Evaluator (this one is a bit special):
+	- Initial tokens
+	- Trigger healer defense rules
+	- Trigger heals
+	- Trigger alive cancel
+```
+
+The reason why the evaluator is special is because of it's external dependencies. It is highly dependant on external state. So what I did to test this was specify a SOFAScript in the test, and write down test s where I checked for what I expected I would get back based on the current state of the simulation. Also, the evaluator is based off of a whole lot of generated code and the ANTLR4 library.
+
+I discovered quite quickly that I had a plethora of bugs in the Evaluator that I did not notice while viewing the simulation.
+
+However, the first, and by far largest problem, I noticed when I wanted to start writing my tests was how strict I had been on access modifiers in my classes. Following good standards and setting all private members to be just that made them all inaccessible to the unit tests.
+
+I discussed this matter a lot with the resident test nerd at informatics (Masters student Baste Nesse Buanes). He presented the solution I went with to circumvent this problem, by making all private members I needed to access from my tests into protected members, and placing my tests in the same package as the class I want to test.
+
+The second and third problem go a bit hand in hand, and that is hidden state and a few way too long methods. The CharacterActor was by far the primary culprit in this case, and specifically the draw()-method we overwrite from libGDX:
+
+```
+@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+
+		if (timeSinceDrawUpdate >= 0.25 && c.alive()) {
+			framenumber++;
+
+			switch (state) {
+			case ATTACK:
+				if (framenumber >= 5 || framenumber < 3)
+					framenumber = 3;
+				break;
+			case MOVE:
+				if (framenumber >= 3)
+					framenumber = 0;
+				break;
+			}
+
+			timeSinceDrawUpdate = 0;
+		} else {
+			timeSinceDrawUpdate += Gdx.graphics.getDeltaTime();
+		}
+
+		if (timeSinceUpdate >= 0.25 && c.alive()) {
+			tokens = c.getNextTokens();
+
+			for (Token t : tokens) {
+				if (t.getOperation().equals("Attack")) {
+					boolean valid = c.attack(t.getTarget());
+					if (valid)
+						state = CharacterState.ATTACK;
+
+					if (c.getName().contains("ranger") && valid) {
+						getParent().addActor(new ArrowActor(c, t.getTarget()));
+					}
+				}
+
+				else if (t.getOperation().equals("Move")) {
+					move(t);
+					if (timeSinceAttack >= 0.5) {
+						state = CharacterState.MOVE;
+						timeSinceAttack = 0;
+					}
+				}
+
+				else if (t.getOperation().equals("Heal")) {
+					boolean valid = c.heal(t.getTarget());
+					if (valid)
+						state = CharacterState.ATTACK;
+				}
+
+				else if (t.getOperation().equals("Defend"))
+					c.defend();
+
+				else if (t.getOperation().equals("Roam")) {
+					move();
+					if (timeSinceAttack >= 0.5) {
+						state = CharacterState.MOVE;
+						timeSinceAttack = 0;
+					}
+				}
+			}
+			timeSinceUpdate = 0;
+		} else {
+			timeSinceUpdate += Gdx.graphics.getDeltaTime();
+		}
+
+		if (state == CharacterState.ATTACK)
+			timeSinceAttack += Gdx.graphics.getDeltaTime();
+
+		if (c.alive()){
+			batch.draw(textures[framenumber], getX(), getY(), getOriginX(),
+					getOriginY(), textures[framenumber].getRegionWidth(),
+					textures[framenumber].getRegionHeight(), 1, 1, 0);
+
+			batch.draw(red, getX()+8, getY()+50, 30, 5);
+			batch.draw(green, getX()+8, getY()+50, 30.0f * ((float) c.getCurrentHealth()/(float) c.getMaxHealth()), 5);
+		}
+	}
+```
+
+There are several problems in this method that prevents testing:
+
+- Tokens are read, and evaluated in the draw()-method
+- Dependencies on external static methods that are hard to mock
+- State set and evaluated in the draw()-method
+
+This method has been refactored and cleaned up, and now only uses libGDX functions and some simple arithmetics, so it is no longer neccessary to explicitly test it:
+
+```
+@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
+		super.draw(batch, parentAlpha);
+		
+		deltaTime = Gdx.graphics.getDeltaTime();
+
+		updateAnimation();
+		readTokens();
+		
+		if (state == CharacterState.ATTACK)
+			timeSinceAttack += deltaTime;
+
+		if (c.alive()){
+			batch.draw(textures[framenumber], getX(), getY(), getOriginX(),
+					getOriginY(), textures[framenumber].getRegionWidth(),
+					textures[framenumber].getRegionHeight(), 1, 1, 0);
+
+			batch.draw(red, getX()+8, getY()+50, 30, 5);
+			batch.draw(green, getX()+8, getY()+50, 30.0f * ((float) c.getCurrentHealth()/(float) c.getMaxHealth()), 5);
+		}
+	}
+```
+
+With the following methods extracted from it:
+
+```
+	private void readTokens(){
+		if (timeSinceUpdate >= 0.25 && c.alive()) {
+			tokens = c.getNextTokens();
+
+			for (Token t : tokens) {
+				if (t.getOperation().equals("Attack")) 
+					performAttack(t);
+				else if (t.getOperation().equals("Move")) 
+					performMove(t);
+				else if (t.getOperation().equals("Heal")) 
+					performHeal(t);
+				else if (t.getOperation().equals("Defend"))
+					performDefend();
+				else if (t.getOperation().equals("Roam"))
+					performRoam();
+			}
+			
+			timeSinceUpdate = 0;
+		} else {
+			timeSinceUpdate += deltaTime;
+		}
+	}
+```
+
+```
+	
+	protected void updateAnimation(){
+		if (timeSinceDrawUpdate >= 0.25 && c.alive()) {
+			framenumber++;
+
+			switch (state) 	{
+				case ATTACK:
+					if (framenumber >= 5 || framenumber < 3)
+						framenumber = 3;
+				break;
+				case MOVE:
+					if (framenumber >= 3)
+						framenumber = 0;
+					break;
+			}
+
+			timeSinceDrawUpdate = 0;
+		} else {
+			timeSinceDrawUpdate += deltaTime;
+		}
+	}
+```
+
+```
+	protected void performAttack(Token t){
+		boolean valid = c.attack(t.getTarget());
+		if (valid)
+			state = CharacterState.ATTACK;
+
+		if (c.getClass().equals(Ranger.class) && valid) {
+			getParent().addActor(new ArrowActor(c, t.getTarget()));
+		}
+	}
+```
+
+```
+	protected void performMove(Token t){
+		move(t);
+		if (timeSinceAttack >= 0.5) {
+			state = CharacterState.MOVE;
+			timeSinceAttack = 0;
+		}
+	}
+```
+
+```
+	protected void performHeal(Token t){
+		boolean valid = c.heal(t.getTarget());
+
+		if (valid)
+			state = CharacterState.ATTACK;
+	}
+```
+
+```
+	protected void performRoam(){
+		move();
+		if (timeSinceAttack >= 0.5) {
+			state = CharacterState.MOVE;
+			timeSinceAttack = 0;
+		}
+	}
+```
+
+```
+	private void performDefend(){
+		c.defend();
+	}
+```
+
+As you can now see, we can test animation and attack state by manually adjusting the deltaTime member and calling updateAnimation() and performRoam(), performMove(), or performAttack().
+
+I also had to, which I also should've done to begin with, define what makes objects equal for the different classes and write the equals()-methods.
+
+I will say more about what I've learned from this later in this document.
 
 ### Milestones
 
+A small point my supervisor wanted me to add in the original project description was milestones, and she wanted me to add this specifically so that I would learn that milestone estimates are in most cases wrong. And she was very very correct.
+
+I believe I overshot my milestones by atleast 2-3 weeks.
+
 ## Conclusion
+
+### Learning
+
+### Implementation
+
+### Testing
 
 ## Credit
 
 A big thank you to Paul Grant for the sprites used in the simulation.
+
+A big thank you to Patrick Monslaup for doing the initial project with me, and making the beautiful flow charts for SOFAScript.
+
+And last but not least, a huge thank you to the best lecturer I've ever had, Anya Helene Bagge, for being my supervisor on this project.
