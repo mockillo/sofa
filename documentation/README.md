@@ -609,7 +609,7 @@ I will say more about what I've learned from this later in this document.
 
 A small point my supervisor wanted me to add in the original project description was milestones, and she wanted me to add this specifically so that I would learn that milestone estimates are in most cases wrong. And she was very very correct.
 
-I believe I overshot my milestones by atleast 2-3 weeks.
+I believe I overshot my milestones by atleast 2-3 weeks, due to grossly underestimating the time required to perform the different tasks.
 
 ## Conclusion
 
