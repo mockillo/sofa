@@ -379,11 +379,13 @@ Evaluator (this one is a bit special):
 
 The reason why the evaluator is special is because of it's external dependencies. It is highly dependant on external state. So what I did to test this was specify a SOFAScript in the test, and write down test s where I checked for what I expected I would get back based on the current state of the simulation. Also, the evaluator is based off of a whole lot of generated code and the ANTLR4 library.
 
-I discovered quite quickly that I had a plethora of bugs in the Evaluator that I did not notice while viewing the simulation.
+I then discovered quite quickly that I had a plethora of bugs in the Evaluator that I did not notice while viewing the simulation.
 
 However, the first, and by far largest problem, I noticed when I wanted to start writing my tests was how strict I had been on access modifiers in my classes. Following good standards and setting all private members to be just that made them all inaccessible to the unit tests.
 
 I discussed this matter a lot with the resident test nerd at informatics (Masters student Baste Nesse Buanes). He presented the solution I went with to circumvent this problem, by making all private members I needed to access from my tests into protected members, and placing my tests in the same package as the class I want to test.
+
+Granted, you can avoid this by using reflections in java, but without going into detail about that whole ordeal we decided that the above approach was the better of the options available.
 
 The second and third problem go a bit hand in hand, and that is hidden state and a few way too long methods. The CharacterActor was by far the primary culprit in this case, and specifically the draw()-method we overwrite from libGDX:
 
@@ -615,9 +617,16 @@ I believe I overshot my milestones by atleast 2-3 weeks, due to grossly underest
 
 ### Learning
 
-### Implementation
+By doing this project, and forcing myself into so many uncomfortable situations compared to how I normally work, I've learned to appreciate more modern ways of development. TDD is embraced now, compared to before when I thought that tests can be written later, and that turned out to be quite the job to do in this case.
 
-### Testing
+I've also learned alot about prototyping programming languages, designing them, and implementing them. And in the case of DSL's I've learned how to incorporate my language and ideas in a secondary project to control the runtime of the secondary project. I've also learned why a DSL can a bad choice; no tools (besides what you make yourself), no documentation (besides what you make yourself), and lastly no one want's to put any effort into learning how to use your DSL. It's been quite hard to get other people to actually play the game. Most responses have been positive, and a lot of people have been wanting to see the project during development, but only two people besides me have ever written a SOFAScript, yet.
+
+Also, as a result of the choice to go back and test every single piece of functionality, I've learned that bad code will always come back and bite you. As mentioned earlier, the initial simulation code for this project was written in a hurry to be a addition to the programming language project we had in our INF225 class. The result of the short time I had to write it, and the the scope of the simulation, resulted in some dirty hacks and shortcuts to get it done so I could focus on the language part of the project. The result of this is as you've read earlier in this report, a huge mess that took quite some time to clean up.
+
+### All in all...
+
+... I've had a great time doing this, and I would like to thank everyone that have shown some interest in the project. 
+
 
 ## Credit
 
