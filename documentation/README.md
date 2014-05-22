@@ -108,7 +108,7 @@ You can have several boolean expressions in a predicate, and you can chain them 
 
 ![Expression Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/expression.png)
 
-![Token Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/tokenpng)
+![Token Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/token.png)
 
 ![Builtin Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/builtin.png)
 
