@@ -1,4 +1,4 @@
-# Development report (Work in Progress)
+# Development report
 
 ## SOFA (Scripted Offline Fighting Arena)
 
@@ -104,7 +104,13 @@ This script will attack any hostile enemy that is closer to our healer than they
 
 You can have several boolean expressions in a predicate, and you can chain them by comma separating them. The comma acts as a AND-operator and the predicate will only hold if all the boolean expressions are true.
 
-(TODO: Insert illustrations of script flow)
+![Script Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/team.png)
+
+![Expression Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/expression.png)
+
+![Token Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/tokenpng)
+
+![Builtin Diagram](https://raw.githubusercontent.com/mockillo/sofa/master/documentation/images/builtin.png)
 
 #### Functions
 
