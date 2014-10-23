@@ -21,5 +21,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/mockillo/dev/eclipse/plugins/eclipsequickfixesdependencies_1.0.0.201404081829/evosuite.jar"/>
+	<classpathentry kind="lib" path="/Users/mockillo/dev/eclipse/plugins/eclipsequickfixesdependencies_1.0.0.201404081829/evosuiteannotations.jar"/>
+	<classpathentry kind="src" path="evosuite-tests"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

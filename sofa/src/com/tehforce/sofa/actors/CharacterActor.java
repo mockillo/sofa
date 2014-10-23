@@ -181,9 +181,9 @@ public class CharacterActor extends Actor {
 	 */
 	protected void move(Token t) {
 		if (t.getTarget() != null) {
-			move(c.getPosition().lerp(t.getTarget().getPosition(), 1));
+			moveRelative(c.getPosition().lerp(t.getTarget().getPosition(), 1));
 		} else if (t.getTarget() == null && t.getArgument() != null) {
-			move(t.getArgument());
+			moveRelative(t.getArgument());
 		} else
 			move();
 	}
@@ -193,10 +193,10 @@ public class CharacterActor extends Actor {
 	 * 
 	 * @param v
 	 */
-	protected void move(Vector2 v) {
+	protected void moveRelative(Vector2 v) {
 		setPosition(gamePosToScreenPos(c.getPosition().x + v.x),
 				gamePosToScreenPos(c.getPosition().y + v.y));
-		move(c.getPosition().x + v.x, c.getPosition().y + v.y);
+		moveAbsolute(c.getPosition().x + v.x, c.getPosition().y + v.y);
 	}
 
 	/**
@@ -205,7 +205,7 @@ public class CharacterActor extends Actor {
 	 * @param x
 	 * @param y
 	 */
-	protected void move(float x, float y) {
+	protected void moveAbsolute(float x, float y) {
 		setPosition(gamePosToScreenPos(x), gamePosToScreenPos(y));
 		c.setX(x);
 		c.setY(y);
@@ -221,7 +221,7 @@ public class CharacterActor extends Actor {
 		int rx = r.nextInt(100) - 50;
 		int ry = r.nextInt(100) - 50;
 		
-		move(c.getPosition().lerp(new Vector2(rx, ry), 1).nor());
+		moveRelative(c.getPosition().lerp(new Vector2(rx, ry), 1).nor());
 		
 		Log.log("Roam", c);
 	}

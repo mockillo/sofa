@@ -84,6 +84,7 @@ public class GameController {
 					rightTeam.getAbsolutePath()));
 		} catch (IOException e) {
 			System.out.println("Error reading input files: " + e.getMessage());
+			Gdx.app.exit();
 		}
 
 		SofaLangParser lparser = new SofaLangParser(new CommonTokenStream(llex));

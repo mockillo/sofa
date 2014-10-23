@@ -50,7 +50,7 @@ public class TestCharacterActor {
 
 	@Test
 	public void testMovingAbsolute() {	
-		ca.move(10,10);
+		ca.moveAbsolute(10,10);
 		assertEquals(new Vector2(10, 10), c.getPosition());
 	}
 	
