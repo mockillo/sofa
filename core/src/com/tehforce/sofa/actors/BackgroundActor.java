@@ -26,7 +26,7 @@
 package com.tehforce.sofa.actors;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.tehforce.sofa.GameController;
@@ -47,7 +47,7 @@ public class BackgroundActor extends Actor {
 	}
 
 	@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
+	public void draw(Batch batch, float parentAlpha) {
 		super.draw(batch, parentAlpha);
 
 		// batch.draw(texture, 0, 0, 0, 0, texture.getRegionWidth(),

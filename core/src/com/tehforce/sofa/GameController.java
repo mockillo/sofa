@@ -132,7 +132,7 @@ public class GameController {
 	 * Loads all textures, locks the thread intentionally until all textures are finished loading.
 	 */
 	private void loadTextures() {
-		Texture.setEnforcePotImages(false);
+		//Texture.setEnforcePotImages(false);
 
 		for (Character c : characters)
 			for (int i = 0; i < 5; i++)

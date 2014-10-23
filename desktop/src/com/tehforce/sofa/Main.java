@@ -34,8 +34,7 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration(); //light weight java game library
 		cfg.title = "sofa";
-		cfg.useGL20 = false;
-		cfg.width = 1000;
+        cfg.width = 1000;
 		cfg.height = 1000;
 		
 		if(args.length == 1){

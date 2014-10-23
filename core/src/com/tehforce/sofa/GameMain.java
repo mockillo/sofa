@@ -29,9 +29,10 @@ import java.io.File;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.tehforce.sofa.ui.GameWorld;
 
 /**
@@ -65,7 +66,7 @@ public class GameMain implements ApplicationListener {
 		camera = new OrthographicCamera();
 		camera.translate(0, -500f);
 		camera.update();
-		stage.setViewport(1000, 1000, false);
+		stage.setViewport(new StretchViewport(1000, 1000));
 	}
 
 	@Override
@@ -83,7 +84,7 @@ public class GameMain implements ApplicationListener {
 		}
 
 		Gdx.gl.glClearColor(0.0f, 0.678f, 0.337f, 0.0f);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		stage.draw();
 		stage.getCamera().update();
